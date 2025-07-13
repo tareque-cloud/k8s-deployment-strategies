@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: simple-website
+  name: simple-website
+  namespace: rolling-ns
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1             # Optional - 1 extra Pod can be created during update
+      maxUnavailable: 0       # Optional - 0 unavailable Pods ensure 0 Downtime
+  selector:
+    matchLabels:
+      app: simple-website
+  template:
+    metadata:
+      labels:
+        app: simple-website
+    spec:
+      containers:
+      - name: simple-website
+        image: tareque/simple-website:1.0.0
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
